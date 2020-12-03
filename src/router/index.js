@@ -1,21 +1,33 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
-import state from '@/praject/index'
-
+import store from '@/store/store'
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
+  mode: 'history',
   routes: [
-    // {
-    //   path: '/',
-    //   name: 'HelloWorld',
-    //   component: HelloWorld
-    // },
     {
       path: '/',
-      name: 'state',
-      component: state
-    }
+      name: 'HelloWorld',
+      redirect: '/index'
+    },
+    {
+      path: '/praject',
+      name: 'praject',
+      component: () => import('@/praject/index')
+    },
+    {
+      path: '/ordersearch',
+      name: 'ordersearch',
+      component: () => import('@/views/order/index')      //代理商
+    },
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  // 是否包含配置
+  const html_conf = Vue.prototype.Lo.isEmpty(store.state.store)
+  next()
+})
+
+export default router
